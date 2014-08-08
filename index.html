@@ -1,0 +1,103 @@
+<html data-ng-app='trelloApp'>
+<head>
+    <title>ng-trello</title>
+
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- include bootstrap css -->
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+    
+    <!-- include app's style -->
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    
+    <!-- include angular js -->
+    <script type="text/javascript" src="js/vendor/angular.js"></script>
+    
+    <!-- include application module holding angular controller, directive and service -->
+    <script src="js/app.js"></script>
+    
+</head>
+<body>
+    <!-- header div start -->
+    <header>
+        <h4>ng-trello app</h4>
+    </header>
+    <!-- header div end -->
+    
+    <!-- container div start -->
+    <div class="container">
+        <!-- add list div start -->
+        <div class="add-list-area" data-ng-controller="TaskController">
+            <div class="headerdiv">
+                <h4 class="headerh4">my tasks</h4>
+            </div>
+            
+            <div class="board">
+                <!-- add a list -->
+                <div class="add-list-container">
+                    <input class="searchinput" type="text" ng-model="criteria" placeholder="type to search tasks.."/>
+                    <textarea data-ng-click="showListAddControls()" resize="vertical" data-ng-model="tasklistname" placeholder="add a list.."></textarea>
+                    <div class="add-list-controls" data-ng-show="showControls">
+                        <input type="button" class="add-btn" data-ng-click="addlist()"/>
+                        <input type="button" class="remove-btn" data-ng-click="hideListAddControls()"/>
+                    </div>
+                </div>
+                <!-- add a list -->
+                
+                <!-- show a list -->
+                <div class="lists">
+                    <div class="list-container" data-ng-repeat="list in getFilteredLists(criteria)">
+                        <div class="list-title">
+                            <!-- list edit -->
+                            <input type="text" class="list-title-text" ng-model="newlistname" data-ng-click="showEditListNameControls=true;" ng-init="newlistname=list.name"></textarea>
+                            <div class="edit-list-controls" data-ng-show="showEditListNameControls">
+                                <input type="button" class="add-btn" ng-click="editList(list, newlistname); showEditListNameControls = false; newlistname='';" />
+                                <input type="button" class="remove-btn" ng-click="showEditListNameControls=false;"/>
+                            </div>
+                        </div>
+                        
+                        <!-- show a task -->
+                        <div class="tasks-container" data-ng-repeat="task in list.tasks">
+                            <div class="task" data-ng-init="showEditCardControls=false; textareaclass='non-editable-text-area';">
+                                <div class="task-text">
+                                    <textarea autoheight ng-class="textareaclass" ng-model="task" ng-readonly="!showEditCardControls"></textarea>
+                                </div>
+                                <div class="edit-task">
+                                    <input type="button" class="edit-btn" ng-click="showEditCardControls = true; textareaclass='editable-text-area';"/>
+                                </div>
+                            </div>
+                            <!-- end -->
+                            
+                            <!-- task edit -->
+                            <div class="edit-task-controls" data-ng-show="showEditCardControls">
+                                <input type="button" class="add-btn" ng-click="editTask(list.name, task, $index); showEditCardControls = false; textareaclass='non-editable-text-area';" />
+                                <input type="button" class="remove-btn" ng-click="showEditCardControls=false; textareaclass='non-editable-text-area';"/>
+                            </div>
+                            <!-- end -->
+                        </div>
+                        
+                        <!-- add a task -->
+                        <div class="add-a-card" data-ng-init="showAddCardForm = false">
+                            <div ng-click="showAddCardForm = true" ng-show="!showAddCardForm">
+                                <span class="add-a-card-title">Add a card..</span>
+                            </div>
+                            <div class="add-card-form" data-ng-show="showAddCardForm">
+                                <textarea autoheight resize="vertical" data-ng-model="newtask" placeholder="add a task description.."></textarea>
+                                <div class="add-task-controls">
+                                    <input type="button" class="add-btn" ng-click="addTask(list.name, newtask); showAddCardForm=false; newtask='';">
+                                    <input type="button" class="remove-btn" ng-click="showAddCardForm=false;newtask='';"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end -->
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
