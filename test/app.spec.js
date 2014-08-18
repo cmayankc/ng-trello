@@ -68,7 +68,7 @@ describe(" ng-trello app test suite", function() {
         expect($scope.lists[$scope.tasklistname].tasks.indexOf(editedtask)).toBeGreaterThan(-1);
     });
     
-    it(' edittask should edit the task in the given list', function() {
+    it(' filter should filter the tasks list with the provided criteria', function() {
         
         $scope.criteria = "secondlist-";
         
